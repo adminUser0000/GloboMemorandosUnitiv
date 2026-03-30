@@ -36,9 +36,47 @@ function resetCamera() {
     }
 }
 
+// Função para resetar todos os filtros e voltar ao estado "Todos"
+function resetToTodos() {
+    // Resetar filtros
+    currentFilter = 'todos';
+    currentSearchTerm = '';
+    
+    // Limpar campo de busca
+    if (globalSearch) {
+        globalSearch.value = '';
+    }
+    
+    // Atualizar chips - marcar "Todos" como ativo
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    const chipTodos = document.querySelector('[data-tipo="todos"]');
+    if (chipTodos) {
+        chipTodos.classList.add('active');
+    }
+    
+    // Fechar drawer se estiver aberto
+    if (detailDrawer.classList.contains('open')) {
+        closeDrawer();
+    }
+    
+    // Resetar câmera
+    resetCamera();
+    
+    // Atualizar globo
+    updateGlobeAndCount();
+    
+    // Esconder badge de resultados
+    resultBadge.classList.add('hidden');
+}
+
 // Função para aplicar filtros e atualizar tudo
 function aplicarFiltros() {
     updateGlobeAndCount();
+    
+    // Se não houver filtros ativos (todos e sem busca), resetar câmera
+    if (currentFilter === 'todos' && (!currentSearchTerm || currentSearchTerm.trim() === '')) {
+        resetCamera();
+    }
     
     if (activeCountry) {
         const paisAtualizado = allCountries.find(p => p.pais === activeCountry.pais);
@@ -74,6 +112,16 @@ function renderFilterChips() {
             document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
             this.classList.add('active');
             currentFilter = this.dataset.tipo;
+            
+            // Se clicou em "Todos", resetar busca também
+            if (currentFilter === 'todos') {
+                currentSearchTerm = '';
+                if (globalSearch) {
+                    globalSearch.value = '';
+                }
+                resetCamera();
+            }
+            
             aplicarFiltros();
         });
     });
@@ -222,7 +270,7 @@ function loadCountryDetails(pais) {
                 <i class="fas fa-filter" style="font-size: 3rem; margin-bottom: 15px;"></i>
                 <h3 style="color: var(--primary); margin-bottom: 10px;">Nenhum memorando encontrado</h3>
                 <p style="color: #64748b;">Tente remover alguns filtros para ver mais resultados</p>
-                <button onclick="resetFilters()" style="
+                <button onclick="resetToTodos()" style="
                     background: var(--accent);
                     color: white;
                     border: none;
@@ -366,6 +414,15 @@ function adicionarEventListenersFiltrosDrawer() {
                 }
             });
             
+            // Se selecionou "Todos", resetar busca também
+            if (novoTipo === 'todos') {
+                currentSearchTerm = '';
+                if (globalSearch) {
+                    globalSearch.value = '';
+                }
+                resetCamera();
+            }
+            
             if (activeCountry) {
                 loadCountryDetails(activeCountry);
             }
@@ -389,19 +446,34 @@ window.toggleDetalhes = function(numero) {
 };
 
 window.resetFilters = function() {
-    currentFilter = 'todos';
-    currentSearchTerm = '';
-    globalSearch.value = '';
-    
-    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-    document.querySelector('[data-tipo="todos"]').classList.add('active');
-    
-    aplicarFiltros();
+    resetToTodos();
 };
 
 function closeDrawer() {
     detailDrawer.classList.remove('open');
     activeCountry = null;
+    
+    // Limpar todos os filtros ao fechar o drawer
+    if (currentFilter !== 'todos' || (currentSearchTerm && currentSearchTerm.trim() !== '')) {
+        currentFilter = 'todos';
+        currentSearchTerm = '';
+        
+        // Limpar campo de busca global
+        if (globalSearch) {
+            globalSearch.value = '';
+        }
+        
+        // Atualizar chips - marcar "Todos" como ativo
+        document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+        const chipTodos = document.querySelector('[data-tipo="todos"]');
+        if (chipTodos) {
+            chipTodos.classList.add('active');
+        }
+        
+        // Atualizar o globo com os filtros resetados
+        updateGlobeAndCount();
+    }
+    
     resetCamera();
 }
 
@@ -541,6 +613,11 @@ function updateGlobeAndCount() {
     }
 }
 
+// Função para limpar busca (chamada pelo X)
+window.clearSearch = function() {
+    resetToTodos();
+};
+
 // Event listeners
 document.getElementById('searchToggle').addEventListener('click', () => {
     searchPanel.classList.toggle('visible');
@@ -554,10 +631,32 @@ document.getElementById('statsToggle').addEventListener('click', () => {
 
 document.getElementById('closeDrawer').addEventListener('click', closeDrawer);
 
+// Event listener para o campo de busca - quando perder o foco e estiver vazio
+globalSearch.addEventListener('blur', (e) => {
+    if (globalSearch.value.trim() === '' && currentFilter === 'todos') {
+        resetCamera();
+    }
+});
+
 globalSearch.addEventListener('input', (e) => {
     currentSearchTerm = e.target.value;
-    aplicarFiltros();
+    
+    // Se a busca ficou vazia, resetar para "Todos"
+    if (currentSearchTerm.trim() === '') {
+        resetToTodos();
+    } else {
+        aplicarFiltros();
+    }
 });
+
+// Botão de limpar busca (X) - se existir no HTML
+const clearSearchBtn = document.querySelector('.search-clear') || document.getElementById('clearSearch');
+if (clearSearchBtn) {
+    clearSearchBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        resetToTodos();
+    });
+}
 
 document.addEventListener('click', (e) => {
     if (!searchPanel.contains(e.target) && !document.getElementById('searchToggle').contains(e.target)) {
