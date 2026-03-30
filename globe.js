@@ -1,0 +1,583 @@
+// Configuração global
+let world;
+let currentFilter = 'todos';
+let currentSearchTerm = '';
+let activeCountry = null;
+let allCountries = [...memorandos];
+
+// Posição original da câmera (como estava no código original)
+const CAMERA_ORIGINAL = {
+    lat: 15,
+    lng: 15,
+    altitude: 2.8
+};
+
+// Elementos DOM
+const globeContainer = document.getElementById('globe-container');
+const searchPanel = document.getElementById('searchPanel');
+const statsPanel = document.getElementById('statsPanel');
+const detailDrawer = document.getElementById('detailDrawer');
+const drawerTitle = document.getElementById('drawerTitle');
+const drawerContent = document.getElementById('drawerContent');
+const globalSearch = document.getElementById('globalSearch');
+const filterChips = document.getElementById('filterChips');
+const resultBadge = document.getElementById('resultBadge');
+const resultCount = document.getElementById('resultCount');
+
+// Atualizar estatísticas
+document.getElementById('statPaises').textContent = totalPaises;
+document.getElementById('statMemorandos').textContent = totalMemorandos;
+document.getElementById('statInstituicoes').textContent = totalInstituicoes;
+
+// Função para resetar câmera para posição original
+function resetCamera() {
+    if (world) {
+        world.pointOfView(CAMERA_ORIGINAL, 1000);
+    }
+}
+
+// Função para aplicar filtros e atualizar tudo
+function aplicarFiltros() {
+    updateGlobeAndCount();
+    
+    if (activeCountry) {
+        const paisAtualizado = allCountries.find(p => p.pais === activeCountry.pais);
+        if (paisAtualizado) {
+            loadCountryDetails(paisAtualizado);
+        }
+    }
+}
+
+// Renderizar chips de filtro
+function renderFilterChips() {
+    let html = `
+        <span class="chip ${currentFilter === 'todos' ? 'active' : ''}" data-tipo="todos">
+            <i class="fas fa-globe"></i> Todos (${totalMemorandos})
+        </span>
+    `;
+    
+    Object.entries(tiposInstituicao).forEach(([key, value]) => {
+        if (value.count > 0) {
+            html += `
+                <span class="chip ${currentFilter === key ? 'active' : ''}" data-tipo="${key}">
+                    <i class="fas ${value.icon}"></i> ${value.nome} (${value.count})
+                </span>
+            `;
+        }
+    });
+    
+    filterChips.innerHTML = html;
+    
+    document.querySelectorAll('.chip').forEach(chip => {
+        chip.addEventListener('click', function(e) {
+            e.stopPropagation();
+            document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+            this.classList.add('active');
+            currentFilter = this.dataset.tipo;
+            aplicarFiltros();
+        });
+    });
+}
+
+// Mini estatísticas por tipo
+function renderTipoMiniStats() {
+    const container = document.getElementById('tipoMiniStats');
+    let html = '';
+    Object.entries(tiposInstituicao).forEach(([key, value]) => {
+        if (value.count > 0) {
+            html += `<div class="mini-tipo" style="border-left-color: ${value.cor}">${value.nome}: ${value.count}</div>`;
+        }
+    });
+    container.innerHTML = html;
+}
+
+// Formatar data para DD/MM/AAAA
+function formatarData(dataStr) {
+    if (!dataStr || dataStr === 'NS') return 'Não especificada';
+    try {
+        const data = new Date(dataStr);
+        return data.toLocaleDateString('pt-PT', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        });
+    } catch {
+        return dataStr;
+    }
+}
+
+// Função para filtrar acordos de um país
+function filtrarAcordosDoPais(pais) {
+    if (!pais) return [];
+    
+    let acordosFiltrados = [...pais.acordos];
+    
+    if (currentFilter !== 'todos') {
+        acordosFiltrados = acordosFiltrados.filter(a => a.tipo_instituicao === currentFilter);
+    }
+    
+    if (currentSearchTerm && currentSearchTerm.trim() !== '') {
+        const term = currentSearchTerm.toLowerCase().trim();
+        acordosFiltrados = acordosFiltrados.filter(a => 
+            a.entidade.toLowerCase().includes(term) ||
+            a.descricao.toLowerCase().includes(term) ||
+            a.assinante_unitiva.toLowerCase().includes(term) ||
+            a.assinante_parceiro.toLowerCase().includes(term)
+        );
+    }
+    
+    return acordosFiltrados;
+}
+
+// Renderizar filtros dentro do drawer
+function renderDrawerFilters(pais, acordosFiltrados) {
+    const contagemTipos = {
+        todos: pais.acordos.length
+    };
+    
+    Object.keys(tiposInstituicao).forEach(key => {
+        contagemTipos[key] = pais.acordos.filter(a => a.tipo_instituicao === key).length;
+    });
+    
+    let filtrosHtml = `
+        <div style="margin-bottom: 20px;">
+            <h5 style="color: var(--primary); margin-bottom: 12px; font-size: 14px;">
+                <i class="fas fa-filter"></i> Filtrar por tipo:
+            </h5>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+    `;
+    
+    filtrosHtml += `
+        <button class="drawer-filter-btn ${currentFilter === 'todos' ? 'active' : ''}" data-tipo="todos" style="
+            padding: 8px 16px;
+            border: 2px solid ${currentFilter === 'todos' ? '#C41E3A' : '#e2e8f0'};
+            background: ${currentFilter === 'todos' ? '#C41E3A' : 'white'};
+            color: ${currentFilter === 'todos' ? 'white' : '#475569'};
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        ">
+            <i class="fas fa-globe"></i> Todos (${contagemTipos.todos})
+        </button>
+    `;
+    
+    Object.entries(tiposInstituicao).forEach(([key, value]) => {
+        if (contagemTipos[key] > 0) {
+            filtrosHtml += `
+                <button class="drawer-filter-btn ${currentFilter === key ? 'active' : ''}" data-tipo="${key}" style="
+                    padding: 8px 16px;
+                    border: 2px solid ${currentFilter === key ? value.cor : '#e2e8f0'};
+                    background: ${currentFilter === key ? value.cor : 'white'};
+                    color: ${currentFilter === key ? 'white' : '#475569'};
+                    border-radius: 30px;
+                    font-size: 13px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                ">
+                    <i class="fas ${value.icon}"></i> ${value.nome} (${contagemTipos[key]})
+                </button>
+            `;
+        }
+    });
+    
+    filtrosHtml += `
+            </div>
+        </div>
+    `;
+    
+    return filtrosHtml;
+}
+
+// Função para carregar detalhes do país
+function loadCountryDetails(pais) {
+    if (!pais) return;
+    
+    activeCountry = pais;
+    const acordosFiltrados = filtrarAcordosDoPais(pais);
+    
+    const totalFiltrado = acordosFiltrados.length;
+    const totalOriginal = pais.acordos.length;
+    drawerTitle.innerHTML = `
+        ${pais.pais} · ${pais.continente}
+        <span style="font-size: 0.8rem; background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 30px; margin-left: 10px;">
+            ${totalFiltrado}/${totalOriginal}
+        </span>
+    `;
+
+    const filtrosDrawerHtml = renderDrawerFilters(pais, acordosFiltrados);
+
+    if (acordosFiltrados.length === 0) {
+        drawerContent.innerHTML = `
+            ${filtrosDrawerHtml}
+            <div class="empty-state">
+                <i class="fas fa-filter" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                <h3 style="color: var(--primary); margin-bottom: 10px;">Nenhum memorando encontrado</h3>
+                <p style="color: #64748b;">Tente remover alguns filtros para ver mais resultados</p>
+                <button onclick="resetFilters()" style="
+                    background: var(--accent);
+                    color: white;
+                    border: none;
+                    padding: 12px 24px;
+                    border-radius: 30px;
+                    margin-top: 20px;
+                    cursor: pointer;
+                    font-weight: 600;
+                    font-size: 14px;
+                    box-shadow: 0 4px 10px rgba(196,30,58,0.3);
+                    transition: all 0.3s;
+                ">
+                    <i class="fas fa-times"></i> Limpar filtros
+                </button>
+            </div>
+        `;
+        detailDrawer.classList.add('open');
+        adicionarEventListenersFiltrosDrawer();
+        return;
+    }
+
+    let html = filtrosDrawerHtml;
+    
+    html += `
+        <div style="
+            background: linear-gradient(135deg, var(--primary) 0%, #1a365d 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+        ">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <span><i class="fas fa-file-signature"></i> <strong>${acordosFiltrados.length}</strong> memorandos</span>
+                <span style="background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 30px; font-size: 0.8rem;">
+                    <i class="fas fa-filter"></i> ${currentFilter === 'todos' ? 'Todos' : tiposInstituicao[currentFilter]?.nome}
+                </span>
+            </div>
+            ${currentSearchTerm ? `
+                <div style="font-size: 0.8rem; background: rgba(255,255,255,0.1); padding: 8px; border-radius: 8px;">
+                    <i class="fas fa-search"></i> Busca: "${currentSearchTerm}"
+                </div>
+            ` : ''}
+        </div>
+    `;
+    
+    acordosFiltrados.sort((a, b) => b.numero - a.numero).forEach(a => {
+        const tipoInfo = tiposInstituicao[a.tipo_instituicao] || tiposInstituicao.outro;
+        const dataFormatada = a.data !== 'NS' ? formatarData(a.data) : 'Não especificada';
+        const duracao = a.duracao !== 'NS' ? a.duracao : 'Não especificada';
+        const renovacao = a.tipo_renovacao !== 'NS' ? a.tipo_renovacao : 'Não especificada';
+        
+        html += `
+            <div class="agreement-card" id="acordo-${a.numero}">
+                <div style="display: flex; gap: 12px; align-items: flex-start;">
+                    <div style="flex-shrink: 0;">
+                        <div style="width: 70px; height: 70px; background: #f8fafc; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: 1px solid #e2e8f0; overflow: hidden;">
+                            <img src="${a.caminho_imagem}" alt="${a.entidade}" 
+                                 style="width: 100%; height: 100%; object-fit: cover;"
+                                 onerror="this.src='https://placehold.co/70x70/e2e8f0/475569?text=Logo'">
+                        </div>
+                    </div>
+                    
+                    <div style="flex: 1;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                            <span class="agreement-number" style="font-size: 11px;">Memorando nº ${a.numero}</span>
+                            <span class="tipo-badge-card" style="background: ${tipoInfo.cor}; font-size: 10px; padding: 3px 8px;">${tipoInfo.nome}</span>
+                        </div>
+                        
+                        <h4 style="font-size: 15px; margin: 0 0 6px 0; line-height: 1.3;">${a.entidade}</h4>
+                        
+                        <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 6px;">
+                            <div style="display: flex; align-items: center; gap: 4px;">
+                                <i class="fas fa-calendar" style="width: 14px; font-size: 11px; color: #64748b;"></i>
+                                <span style="font-size: 11px;"><strong>Data:</strong> ${dataFormatada}</span>
+                            </div>
+                            
+                            <div style="display: flex; align-items: center; gap: 4px;">
+                                <i class="fas fa-hourglass-half" style="width: 14px; font-size: 11px; color: #64748b;"></i>
+                                <span style="font-size: 11px;"><strong>Duração:</strong> ${duracao}</span>
+                            </div>
+                            
+                            <div style="display: flex; align-items: center; gap: 4px;">
+                                <i class="fas fa-sync-alt" style="width: 14px; font-size: 11px; color: #64748b;"></i>
+                                <span style="font-size: 11px;"><strong>Renovação:</strong> ${renovacao}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="agreement-desc" style="font-size: 11px; margin-bottom: 8px; line-height: 1.4; color: #475569;">
+                            <i class="fas fa-quote-left" style="opacity: 0.5; font-size: 0.7rem;"></i>
+                            ${a.descricao.length > 100 ? a.descricao.substring(0, 100) + '...' : a.descricao}
+                        </div>
+                        
+                        <button class="ver-mais-btn" onclick="toggleDetalhes(${a.numero})" style="font-size: 10px; padding: 4px 8px; background: none; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; color: #C41E3A;">
+                            <i class="fas fa-chevron-down"></i> Ver detalhes da assinatura
+                        </button>
+                        
+                        <div id="detalhes-${a.numero}" style="display: none; margin-top: 8px; padding-top: 8px; border-top: 1px dashed #e2e8f0;">
+                            <h5 style="color: var(--primary); margin-bottom: 6px; font-size: 11px;">
+                                <i class="fas fa-pen-fancy"></i> Detalhes da assinatura
+                            </h5>
+                            
+                            <div style="margin-bottom: 6px;">
+                                <i class="fas fa-user-graduate" style="color: var(--primary); width: 18px; font-size: 11px;"></i>
+                                <div style="font-size: 10px; margin-top: 2px;">
+                                    <strong>UNITIVA:</strong><br>
+                                    ${a.assinante_unitiva}
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <i class="fas fa-user-tie" style="color: var(--primary); width: 18px; font-size: 11px;"></i>
+                                <div style="font-size: 10px; margin-top: 2px;">
+                                    <strong>Parceiro:</strong><br>
+                                    ${a.assinante_parceiro}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    
+    drawerContent.innerHTML = html;
+    detailDrawer.classList.add('open');
+    adicionarEventListenersFiltrosDrawer();
+}
+
+function adicionarEventListenersFiltrosDrawer() {
+    document.querySelectorAll('.drawer-filter-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const novoTipo = this.dataset.tipo;
+            currentFilter = novoTipo;
+            
+            document.querySelectorAll('.chip').forEach(chip => {
+                if (chip.dataset.tipo === novoTipo) {
+                    chip.classList.add('active');
+                } else {
+                    chip.classList.remove('active');
+                }
+            });
+            
+            if (activeCountry) {
+                loadCountryDetails(activeCountry);
+            }
+            
+            updateGlobeAndCount();
+        });
+    });
+}
+
+window.toggleDetalhes = function(numero) {
+    const detalhesDiv = document.getElementById(`detalhes-${numero}`);
+    const botao = document.querySelector(`#acordo-${numero} .ver-mais-btn`);
+    
+    if (detalhesDiv.style.display === 'none') {
+        detalhesDiv.style.display = 'block';
+        botao.innerHTML = '<i class="fas fa-chevron-up"></i> Ver menos detalhes';
+    } else {
+        detalhesDiv.style.display = 'none';
+        botao.innerHTML = '<i class="fas fa-chevron-down"></i> Ver detalhes da assinatura';
+    }
+};
+
+window.resetFilters = function() {
+    currentFilter = 'todos';
+    currentSearchTerm = '';
+    globalSearch.value = '';
+    
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    document.querySelector('[data-tipo="todos"]').classList.add('active');
+    
+    aplicarFiltros();
+};
+
+function closeDrawer() {
+    detailDrawer.classList.remove('open');
+    activeCountry = null;
+    resetCamera();
+}
+
+function initGlobe() {
+    const pointsData = allCountries.map(p => ({
+        lat: p.lat,
+        lng: p.lng,
+        pais: p.pais,
+        totalAcordos: p.acordos.length,
+        acordos: p.acordos,
+        continente: p.continente
+    }));
+
+    world = Globe()
+        .globeImageUrl('//unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
+        .backgroundImageUrl('//unpkg.com/three-globe/example/img/night-sky.png')
+        .htmlElementsData(pointsData)
+        .htmlLat(d => d.lat)
+        .htmlLng(d => d.lng)
+        .htmlElement(d => {
+            const container = document.createElement('div');
+            container.style.cursor = 'pointer';
+            container.style.pointerEvents = 'auto';
+            
+            const marker = document.createElement('div');
+            marker.style.cssText = `
+                background: white;
+                width: 52px;
+                height: 52px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+                border: 4px solid #C41E3A;
+                transition: all 0.3s ease;
+                position: relative;
+                animation: pulse 2s infinite;
+            `;
+            
+            marker.innerHTML = `
+                <i class="fas fa-handshake" style="font-size: 24px; color: #C41E3A;"></i>
+                <span style="
+                    position: absolute;
+                    top: -45px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: #002147;
+                    color: white;
+                    padding: 8px 16px;
+                    border-radius: 40px;
+                    font-size: 13px;
+                    font-weight: bold;
+                    white-space: nowrap;
+                    border: 2px solid #FFB81C;
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+                    pointer-events: none;
+                    z-index: 1000;
+                ">${d.pais} (${d.totalAcordos})</span>
+            `;
+            
+            container.appendChild(marker);
+            
+            container.onclick = (e) => {
+                e.stopPropagation();
+                const pais = allCountries.find(p => p.pais === d.pais);
+                if (pais) {
+                    loadCountryDetails(pais);
+                    world.pointOfView({
+                        lat: d.lat,
+                        lng: d.lng,
+                        altitude: 1.8
+                    }, 1000);
+                }
+            };
+            
+            container.onmouseenter = () => {
+                marker.style.transform = 'scale(1.2)';
+                marker.style.boxShadow = '0 12px 30px rgba(196,30,58,0.6)';
+            };
+            
+            container.onmouseleave = () => {
+                marker.style.transform = 'scale(1)';
+                marker.style.boxShadow = '0 8px 25px rgba(196,30,58,0.5)';
+            };
+            
+            return container;
+        })
+        .onGlobeReady(() => {
+            world.pointOfView(CAMERA_ORIGINAL);
+            
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes pulse {
+                    0% { box-shadow: 0 8px 25px rgba(196, 30, 58, 0.4); }
+                    50% { box-shadow: 0 8px 35px rgba(196, 30, 58, 0.8); }
+                    100% { box-shadow: 0 8px 25px rgba(196, 30, 58, 0.4); }
+                }
+            `;
+            document.head.appendChild(style);
+        })
+        (globeContainer);
+
+    world.renderer().setClearColor(0x0a0f1c, 1);
+}
+
+function updateGlobeAndCount() {
+    let filteredCountries = allCountries.map(pais => ({
+        ...pais,
+        acordosFiltrados: pais.acordos.filter(a => {
+            if (currentFilter !== 'todos' && a.tipo_instituicao !== currentFilter) return false;
+            if (currentSearchTerm && currentSearchTerm.trim() !== '') {
+                const term = currentSearchTerm.toLowerCase().trim();
+                return a.entidade.toLowerCase().includes(term) ||
+                       a.descricao.toLowerCase().includes(term);
+            }
+            return true;
+        })
+    })).filter(pais => pais.acordosFiltrados.length > 0);
+
+    const pointsData = filteredCountries.map(p => ({
+        lat: p.lat,
+        lng: p.lng,
+        pais: p.pais,
+        totalAcordos: p.acordosFiltrados.length
+    }));
+
+    world.htmlElementsData(pointsData);
+
+    const totalResultados = filteredCountries.reduce((acc, p) => acc + p.acordosFiltrados.length, 0);
+    resultCount.textContent = totalResultados;
+    
+    if (currentSearchTerm || currentFilter !== 'todos') {
+        resultBadge.classList.remove('hidden');
+    } else {
+        resultBadge.classList.add('hidden');
+    }
+}
+
+// Event listeners
+document.getElementById('searchToggle').addEventListener('click', () => {
+    searchPanel.classList.toggle('visible');
+    statsPanel.classList.remove('visible');
+});
+
+document.getElementById('statsToggle').addEventListener('click', () => {
+    statsPanel.classList.toggle('visible');
+    searchPanel.classList.remove('visible');
+});
+
+document.getElementById('closeDrawer').addEventListener('click', closeDrawer);
+
+globalSearch.addEventListener('input', (e) => {
+    currentSearchTerm = e.target.value;
+    aplicarFiltros();
+});
+
+document.addEventListener('click', (e) => {
+    if (!searchPanel.contains(e.target) && !document.getElementById('searchToggle').contains(e.target)) {
+        searchPanel.classList.remove('visible');
+    }
+    if (!statsPanel.contains(e.target) && !document.getElementById('statsToggle').contains(e.target)) {
+        statsPanel.classList.remove('visible');
+    }
+});
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        closeDrawer();
+    }
+});
+
+// Inicializar tudo
+renderFilterChips();
+renderTipoMiniStats();
+initGlobe();
+updateGlobeAndCount();
+resultBadge.classList.remove('hidden');
+resultCount.textContent = totalMemorandos;

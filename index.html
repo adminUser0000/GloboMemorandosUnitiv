@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNITIVA Memorandos Global· Cooperação Internacional</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header minimalista flutuante -->
+    <header class="glass-header">
+        <div class="header-content">
+            <img src="logo.png" alt="UNITIVA" class="logo-mini">
+            <span class="brand">UNITIVA<span class="light">·Memorandos Global</span></span>
+        </div>
+        <div class="header-actions">
+            <button class="icon-btn" id="statsToggle"><i class="fas fa-chart-pie"></i></button>
+            <button class="icon-btn" id="searchToggle"><i class="fas fa-search"></i></button>
+        </div>
+    </header>
+
+    <!-- Painel de busca expansível (inicia oculto) -->
+    <div class="search-panel" id="searchPanel">
+        <div class="search-panel-inner">
+            <div class="search-field">
+                <i class="fas fa-search"></i>
+                <input type="text" id="globalSearch" placeholder="Instituição, país, tipo...">
+            </div>
+            <div class="filter-chips" id="filterChips"></div>
+        </div>
+    </div>
+
+    <!-- Painel de estatísticas (inicia oculto) -->
+    <div class="stats-panel" id="statsPanel">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <span class="stat-value" id="statPaises">0</span>
+                <span class="stat-label">Países</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value" id="statMemorandos">0</span>
+                <span class="stat-label">Memorandos</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value" id="statInstituicoes">0</span>
+                <span class="stat-label">Instituições</span>
+            </div>
+        </div>
+        <div class="tipo-mini-stats" id="tipoMiniStats"></div>
+    </div>
+
+    <!-- Globo em tela cheia -->
+    <div id="globe-container" class="fullscreen-globe"></div>
+
+    <!-- Painel de detalhes (slide-in) -->
+    <div class="detail-drawer" id="detailDrawer">
+        <div class="drawer-header">
+            <button class="drawer-close" id="closeDrawer"><i class="fas fa-times"></i></button>
+            <h2 id="drawerTitle">Selecione um país</h2>
+        </div>
+        <div class="drawer-content" id="drawerContent">
+            <div class="empty-state">
+                <i class="fas fa-globe"></i>
+                <p>Clique em qualquer marcador no globo para ver os acordos</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contador de resultados flutuante (aparece quando pesquisa ativa) -->
+    <div class="result-badge hidden" id="resultBadge">
+        <span id="resultCount">0</span> resultados
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://unpkg.com/globe.gl"></script>
+    <script src="data.js"></script>
+    <script src="globe.js"></script>
+</body>
+</html>
