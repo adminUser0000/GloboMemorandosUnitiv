@@ -141,26 +141,26 @@ function renderDrawerFilters(pais, acordosFiltrados) {
     
     let filtrosHtml = `
         <div style="margin-bottom: 20px;">
-            <h5 style="color: var(--primary); margin-bottom: 12px; font-size: 14px;">
+            <h5 style="color: var(--primary); margin-bottom: 12px; font-size: 15px;">
                 <i class="fas fa-filter"></i> Filtrar por tipo:
             </h5>
-            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+            <div style="display: flex; flex-wrap: wrap; gap: 10px;">
     `;
     
     filtrosHtml += `
         <button class="drawer-filter-btn ${currentFilter === 'todos' ? 'active' : ''}" data-tipo="todos" style="
-            padding: 8px 16px;
+            padding: 10px 18px;
             border: 2px solid ${currentFilter === 'todos' ? '#C41E3A' : '#e2e8f0'};
             background: ${currentFilter === 'todos' ? '#C41E3A' : 'white'};
             color: ${currentFilter === 'todos' ? 'white' : '#475569'};
             border-radius: 30px;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         ">
             <i class="fas fa-globe"></i> Todos (${contagemTipos.todos})
         </button>
@@ -170,18 +170,18 @@ function renderDrawerFilters(pais, acordosFiltrados) {
         if (contagemTipos[key] > 0) {
             filtrosHtml += `
                 <button class="drawer-filter-btn ${currentFilter === key ? 'active' : ''}" data-tipo="${key}" style="
-                    padding: 8px 16px;
+                    padding: 10px 18px;
                     border: 2px solid ${currentFilter === key ? value.cor : '#e2e8f0'};
                     background: ${currentFilter === key ? value.cor : 'white'};
                     color: ${currentFilter === key ? 'white' : '#475569'};
                     border-radius: 30px;
-                    font-size: 13px;
+                    font-size: 14px;
                     font-weight: 600;
                     cursor: pointer;
                     transition: all 0.2s;
                     display: flex;
                     align-items: center;
-                    gap: 6px;
+                    gap: 8px;
                 ">
                     <i class="fas ${value.icon}"></i> ${value.nome} (${contagemTipos[key]})
                 </button>
@@ -208,7 +208,7 @@ function loadCountryDetails(pais) {
     const totalOriginal = pais.acordos.length;
     drawerTitle.innerHTML = `
         ${pais.pais} · ${pais.continente}
-        <span style="font-size: 0.8rem; background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 30px; margin-left: 10px;">
+        <span style="font-size: 0.9rem; background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 30px; margin-left: 10px;">
             ${totalFiltrado}/${totalOriginal}
         </span>
     `;
@@ -250,18 +250,18 @@ function loadCountryDetails(pais) {
         <div style="
             background: linear-gradient(135deg, var(--primary) 0%, #1a365d 100%);
             color: white;
-            padding: 15px;
+            padding: 18px;
             border-radius: 16px;
             margin-bottom: 20px;
         ">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                <span><i class="fas fa-file-signature"></i> <strong>${acordosFiltrados.length}</strong> memorandos</span>
-                <span style="background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 30px; font-size: 0.8rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <span style="font-size: 15px;"><i class="fas fa-file-signature"></i> <strong>${acordosFiltrados.length}</strong> memorandos</span>
+                <span style="background: rgba(255,255,255,0.2); padding: 6px 14px; border-radius: 30px; font-size: 13px;">
                     <i class="fas fa-filter"></i> ${currentFilter === 'todos' ? 'Todos' : tiposInstituicao[currentFilter]?.nome}
                 </span>
             </div>
             ${currentSearchTerm ? `
-                <div style="font-size: 0.8rem; background: rgba(255,255,255,0.1); padding: 8px; border-radius: 8px;">
+                <div style="font-size: 13px; background: rgba(255,255,255,0.1); padding: 10px; border-radius: 8px;">
                     <i class="fas fa-search"></i> Busca: "${currentSearchTerm}"
                 </div>
             ` : ''}
@@ -276,65 +276,65 @@ function loadCountryDetails(pais) {
         
         html += `
             <div class="agreement-card" id="acordo-${a.numero}">
-                <div style="display: flex; gap: 12px; align-items: flex-start;">
+                <div style="display: flex; gap: 15px; align-items: flex-start;">
                     <div style="flex-shrink: 0;">
-                        <div style="width: 70px; height: 70px; background: #f8fafc; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: 1px solid #e2e8f0; overflow: hidden;">
+                        <div style="width: 80px; height: 80px; background: #f8fafc; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: 1px solid #e2e8f0; overflow: hidden;">
                             <img src="${a.caminho_imagem}" alt="${a.entidade}" 
                                  style="width: 100%; height: 100%; object-fit: cover;"
-                                 onerror="this.src='https://placehold.co/70x70/e2e8f0/475569?text=Logo'">
+                                 onerror="this.src='https://placehold.co/80x80/e2e8f0/475569?text=Logo'">
                         </div>
                     </div>
                     
                     <div style="flex: 1;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                            <span class="agreement-number" style="font-size: 11px;">Memorando nº ${a.numero}</span>
-                            <span class="tipo-badge-card" style="background: ${tipoInfo.cor}; font-size: 10px; padding: 3px 8px;">${tipoInfo.nome}</span>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <span class="agreement-number" style="font-size: 13px; font-weight: 600;">Memorando nº ${a.numero}</span>
+                            <span class="tipo-badge-card" style="background: ${tipoInfo.cor}; font-size: 12px; padding: 4px 12px; border-radius: 20px;">${tipoInfo.nome}</span>
                         </div>
                         
-                        <h4 style="font-size: 15px; margin: 0 0 6px 0; line-height: 1.3;">${a.entidade}</h4>
+                        <h4 style="font-size: 17px; margin: 0 0 8px 0; line-height: 1.3; color: var(--primary);">${a.entidade}</h4>
                         
-                        <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 6px;">
-                            <div style="display: flex; align-items: center; gap: 4px;">
-                                <i class="fas fa-calendar" style="width: 14px; font-size: 11px; color: #64748b;"></i>
-                                <span style="font-size: 11px;"><strong>Data:</strong> ${dataFormatada}</span>
+                        <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 8px;">
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <i class="fas fa-calendar" style="width: 16px; font-size: 13px; color: #64748b;"></i>
+                                <span style="font-size: 13px;"><strong>Data:</strong> ${dataFormatada}</span>
                             </div>
                             
-                            <div style="display: flex; align-items: center; gap: 4px;">
-                                <i class="fas fa-hourglass-half" style="width: 14px; font-size: 11px; color: #64748b;"></i>
-                                <span style="font-size: 11px;"><strong>Duração:</strong> ${duracao}</span>
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <i class="fas fa-hourglass-half" style="width: 16px; font-size: 13px; color: #64748b;"></i>
+                                <span style="font-size: 13px;"><strong>Duração:</strong> ${duracao}</span>
                             </div>
                             
-                            <div style="display: flex; align-items: center; gap: 4px;">
-                                <i class="fas fa-sync-alt" style="width: 14px; font-size: 11px; color: #64748b;"></i>
-                                <span style="font-size: 11px;"><strong>Renovação:</strong> ${renovacao}</span>
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <i class="fas fa-sync-alt" style="width: 16px; font-size: 13px; color: #64748b;"></i>
+                                <span style="font-size: 13px;"><strong>Renovação:</strong> ${renovacao}</span>
                             </div>
                         </div>
                         
-                        <div class="agreement-desc" style="font-size: 11px; margin-bottom: 8px; line-height: 1.4; color: #475569;">
-                            <i class="fas fa-quote-left" style="opacity: 0.5; font-size: 0.7rem;"></i>
-                            ${a.descricao.length > 100 ? a.descricao.substring(0, 100) + '...' : a.descricao}
+                        <div class="agreement-desc" style="font-size: 13px; margin-bottom: 12px; line-height: 1.5; color: #475569;">
+                            <i class="fas fa-quote-left" style="opacity: 0.5; font-size: 0.8rem;"></i>
+                            ${a.descricao.length > 120 ? a.descricao.substring(0, 120) + '...' : a.descricao}
                         </div>
                         
-                        <button class="ver-mais-btn" onclick="toggleDetalhes(${a.numero})" style="font-size: 10px; padding: 4px 8px; background: none; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; color: #C41E3A;">
+                        <button class="ver-mais-btn" onclick="toggleDetalhes(${a.numero})" style="font-size: 12px; padding: 6px 12px; background: none; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; color: #C41E3A; font-weight: 500;">
                             <i class="fas fa-chevron-down"></i> Ver detalhes da assinatura
                         </button>
                         
-                        <div id="detalhes-${a.numero}" style="display: none; margin-top: 8px; padding-top: 8px; border-top: 1px dashed #e2e8f0;">
-                            <h5 style="color: var(--primary); margin-bottom: 6px; font-size: 11px;">
+                        <div id="detalhes-${a.numero}" style="display: none; margin-top: 12px; padding-top: 12px; border-top: 1px dashed #e2e8f0;">
+                            <h5 style="color: var(--primary); margin-bottom: 10px; font-size: 13px;">
                                 <i class="fas fa-pen-fancy"></i> Detalhes da assinatura
                             </h5>
                             
-                            <div style="margin-bottom: 6px;">
-                                <i class="fas fa-user-graduate" style="color: var(--primary); width: 18px; font-size: 11px;"></i>
-                                <div style="font-size: 10px; margin-top: 2px;">
+                            <div style="margin-bottom: 8px;">
+                                <i class="fas fa-user-graduate" style="color: var(--primary); width: 20px; font-size: 13px;"></i>
+                                <div style="font-size: 13px; margin-top: 4px;">
                                     <strong>UNITIVA:</strong><br>
                                     ${a.assinante_unitiva}
                                 </div>
                             </div>
                             
                             <div>
-                                <i class="fas fa-user-tie" style="color: var(--primary); width: 18px; font-size: 11px;"></i>
-                                <div style="font-size: 10px; margin-top: 2px;">
+                                <i class="fas fa-user-tie" style="color: var(--primary); width: 20px; font-size: 13px;"></i>
+                                <div style="font-size: 13px; margin-top: 4px;">
                                     <strong>Parceiro:</strong><br>
                                     ${a.assinante_parceiro}
                                 </div>

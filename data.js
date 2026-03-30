@@ -185,17 +185,7 @@ const memorandos = [
         lat: -18.665695,
         lng: 35.529562,
         acordos: [
-            {
-                numero: 2,
-                entidade: "Banco Mercantil e de Investimentos (BMI)",
-                data: "2008-12-12",
-                duracao: "NS",
-                tipo_renovacao: "NS",
-                descricao: "Cooperação técnico-científica e académica para desenvolvimento de projectos conjuntos.",
-                assinante_unitiva: "Brazão Mazula",
-                assinante_parceiro: "António Matabele",
-                data_assinatura: "2008-12-12"
-            },
+          
             {
                 numero: 3,
                 entidade: "First National Bank",
