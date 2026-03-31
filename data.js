@@ -51,6 +51,8 @@ const imagensPorEntidade = {
     "Moza Banco": "moza.jpeg",
     "Associação Moçambicana de Seguradoras (AMS)": "ams.jpeg",
     "EMOSE – Empresa Moçambicana de Seguros, S.A.": "emose.svg",
+    "North West University": "nw.png",
+
     
     // Moçambique - Acadêmico
     "Universidade Eduardo Mondlane": "uem.jpg",
@@ -569,7 +571,9 @@ const memorandos = [
                 assinante_unitiva: "Nelson Júlio Chacha",
                 assinante_parceiro: "Ok-Hyun Yoon",
                 data_assinatura: "2025-07-10"
-            }
+            },
+
+
         ]
     },
     {
@@ -667,6 +671,17 @@ const memorandos = [
                 assinante_unitiva: "Prof. Doutor Nelson Júlio Chacha",
                 assinante_parceiro: "Prof. Tandi Matsha-Erasmus",
                 data_assinatura: "2025-11-19"
+        },
+                            {
+            numero: 57,
+            entidade: "North West University",
+            data: "NS",
+            duracao: "5 anos",
+            tipo_renovacao: "NS",
+            descricao: "Programa de investigação e inovação académica.",
+            assinante_unitiva: "Nelson Chacha",
+            assinante_parceiro: "Jeffrey Mphahlele",
+            data_assinatura: "NS"
         }
             
             
