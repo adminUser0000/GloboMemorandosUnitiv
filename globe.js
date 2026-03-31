@@ -507,7 +507,6 @@ function closeDrawer() {
     
     resetCamera();
 }
-
 function initGlobe() {
     const pointsData = allCountries.map(p => ({
         lat: p.lat,
@@ -529,12 +528,12 @@ function initGlobe() {
             container.style.cursor = 'pointer';
             container.style.pointerEvents = 'auto';
             
-            // Ajustar tamanho do marcador para mobile
+            // Ajustar tamanho do marcador para mobile - REDUZIDO
             const isSmall = isSmallMobile();
-            const markerSize = isSmall ? 48 : (isMobile() ? 54 : 70);
-            const iconSize = isSmall ? 22 : (isMobile() ? 24 : 32);
-            const fontSize = isSmall ? 13 : (isMobile() ? 14 : 16);
-            const topOffset = isSmall ? -50 : (isMobile() ? -56 : -60);
+            const markerSize = isSmall ? 32 : (isMobile() ? 36 : 44); // Reduzido de 48/54/70 para 32/36/44
+            const iconSize = isSmall ? 16 : (isMobile() ? 18 : 22); // Reduzido de 22/24/32 para 16/18/22
+            const fontSize = isSmall ? 11 : (isMobile() ? 12 : 13); // Reduzido de 13/14/16 para 11/12/13
+            const topOffset = isSmall ? -42 : (isMobile() ? -46 : -50); // Ajustado para acompanhar a redução
             
             const marker = document.createElement('div');
             marker.style.cssText = `
@@ -545,12 +544,15 @@ function initGlobe() {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                box-shadow: 0 8px 25px rgba(0,0,0,0.5);
-                border: 4px solid #C41E3A;
+                box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+                border: 3px solid #C41E3A;
                 transition: all 0.3s ease;
                 position: relative;
                 animation: pulse 2s infinite;
             `;
+            
+            // Truncar nome do país se muito longo
+            const paisNome = d.pais.length > (isSmall ? 12 : 18) ? d.pais.substring(0, (isSmall ? 10 : 15)) + '...' : d.pais;
             
             marker.innerHTML = `
                 <i class="fas fa-handshake" style="font-size: ${iconSize}px; color: #C41E3A;"></i>
@@ -561,17 +563,17 @@ function initGlobe() {
                     transform: translateX(-50%);
                     background: #002147;
                     color: white;
-                    padding: ${isSmall ? '8px 14px' : (isMobile() ? '10px 18px' : '12px 22px')};
-                    border-radius: 40px;
+                    padding: ${isSmall ? '4px 8px' : (isMobile() ? '5px 10px' : '6px 12px')};
+                    border-radius: 30px;
                     font-size: ${fontSize}px;
                     font-weight: bold;
                     white-space: nowrap;
-                    border: 2px solid #FFB81C;
-                    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+                    border: 1.5px solid #FFB81C;
+                    box-shadow: 0 3px 12px rgba(0,0,0,0.3);
                     pointer-events: none;
                     z-index: 1000;
-                    letter-spacing: 0.5px;
-                ">${d.pais} (${d.totalAcordos})</span>
+                    letter-spacing: 0.3px;
+                ">${paisNome} (${d.totalAcordos})</span>
             `;
             
             container.appendChild(marker);
@@ -590,13 +592,13 @@ function initGlobe() {
             };
             
             container.onmouseenter = () => {
-                marker.style.transform = 'scale(1.2)';
-                marker.style.boxShadow = '0 12px 30px rgba(196,30,58,0.6)';
+                marker.style.transform = 'scale(1.1)';
+                marker.style.boxShadow = '0 8px 22px rgba(196,30,58,0.5)';
             };
             
             container.onmouseleave = () => {
                 marker.style.transform = 'scale(1)';
-                marker.style.boxShadow = '0 8px 25px rgba(196,30,58,0.5)';
+                marker.style.boxShadow = '0 6px 18px rgba(196,30,58,0.4)';
             };
             
             return container;
@@ -607,9 +609,9 @@ function initGlobe() {
             const style = document.createElement('style');
             style.textContent = `
                 @keyframes pulse {
-                    0% { box-shadow: 0 8px 25px rgba(196, 30, 58, 0.4); }
-                    50% { box-shadow: 0 8px 35px rgba(196, 30, 58, 0.8); }
-                    100% { box-shadow: 0 8px 25px rgba(196, 30, 58, 0.4); }
+                    0% { box-shadow: 0 6px 18px rgba(196, 30, 58, 0.3); }
+                    50% { box-shadow: 0 6px 24px rgba(196, 30, 58, 0.6); }
+                    100% { box-shadow: 0 6px 18px rgba(196, 30, 58, 0.3); }
                 }
             `;
             document.head.appendChild(style);
