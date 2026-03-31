@@ -252,17 +252,7 @@ const memorandos = [
                 assinante_parceiro: "Nobre dos Santos",
                 data_assinatura: "2019-11-29"
             },
-            {
-                numero: 19,
-                entidade: "Instituto Superior de Tecnologias e Gestão",
-                data: "2012-05-15",
-                duracao: "5 anos",
-                tipo_renovacao: "Renovação automática",
-                descricao: "Formação profissional e intercâmbio de conhecimentos em auditoria.",
-                assinante_unitiva: "Samaria Tovela",
-                assinante_parceiro: "Jorge Marcelino",
-                data_assinatura: "2012-05-15"
-            },
+           
             {
                 numero: 20,
                 entidade: "Instituto do Patrocínio e Assistência Jurídica",
@@ -307,17 +297,7 @@ const memorandos = [
                 assinante_parceiro: "NS",
                 data_assinatura: "NS"
             },
-            {
-                numero: 26,
-                entidade: "ECOSIDA – Associação dos Empresários contra o SIDA",
-                data: "2013-11-12",
-                duracao: "1 ano",
-                tipo_renovacao: "Renovável por acordo",
-                descricao: "Programas de combate ao HIV/SIDA, tuberculose e malária no local de trabalho.",
-                assinante_unitiva: "Graçinda Abiata Mutemba Tivane",
-                assinante_parceiro: "Cornélia Balane",
-                data_assinatura: "2013-11-12"
-            },
+            
             {
                 numero: 27,
                 entidade: "Televisão de Moçambique (TVM)",
@@ -351,17 +331,7 @@ const memorandos = [
                 assinante_parceiro: "Nelson Matsinhe",
                 data_assinatura: "2018-09-21"
             },
-            {
-                numero: 31,
-                entidade: "Bright Adventure, S.A.",
-                data: "2019-04-05",
-                duracao: "Durante implementação MOZTECH",
-                tipo_renovacao: "Renovável por acordo",
-                descricao: "Colaboração no Projecto MOZTECH.",
-                assinante_unitiva: "Inocente Vasco Mutimucuio",
-                assinante_parceiro: "Daniel Boaventura Enoque Tomicene David",
-                data_assinatura: "2019-04-05"
-            },
+            
             {
                 numero: 32,
                 entidade: "Parque Industrial de Beluluane (PIB)",
