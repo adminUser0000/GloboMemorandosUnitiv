@@ -101,16 +101,16 @@ function renderFilterChips() {
     const isSmall = isSmallMobile();
     
     let html = `
-        <span class="chip ${currentFilter === 'todos' ? 'active' : ''}" data-tipo="todos" style="font-size: ${isSmall ? '11px' : '13px'}; padding: ${isSmall ? '6px 10px' : '8px 16px'};">
-            <i class="fas fa-globe"></i> ${isSmall ? '' : 'Todos '}(${totalMemorandos})
+        <span class="chip ${currentFilter === 'todos' ? 'active' : ''}" data-tipo="todos" style="font-size: ${isSmall ? '14px' : '15px'}; padding: ${isSmall ? '10px 14px' : '12px 18px'}; font-weight: 600;">
+            <i class="fas fa-globe"></i> Todos (${totalMemorandos})
         </span>
     `;
     
     Object.entries(tiposInstituicao).forEach(([key, value]) => {
         if (value.count > 0) {
             html += `
-                <span class="chip ${currentFilter === key ? 'active' : ''}" data-tipo="${key}" style="font-size: ${isSmall ? '11px' : '13px'}; padding: ${isSmall ? '6px 10px' : '8px 16px'};">
-                    <i class="fas ${value.icon}"></i> ${isSmall ? '' : value.nome + ' '}(${value.count})
+                <span class="chip ${currentFilter === key ? 'active' : ''}" data-tipo="${key}" style="font-size: ${isSmall ? '14px' : '15px'}; padding: ${isSmall ? '10px 14px' : '12px 18px'}; font-weight: 600;">
+                    <i class="fas ${value.icon}"></i> ${value.nome} (${value.count})
                 </span>
             `;
         }
@@ -152,7 +152,7 @@ function renderTipoMiniStats() {
     let html = '';
     Object.entries(tiposInstituicao).forEach(([key, value]) => {
         if (value.count > 0) {
-            html += `<div class="mini-tipo" style="border-left-color: ${value.cor}; font-size: ${isSmall ? '10px' : '12px'}; padding: ${isSmall ? '6px 8px' : '8px 12px'};">${value.nome}: ${value.count}</div>`;
+            html += `<div class="mini-tipo" style="border-left-color: ${value.cor}; font-size: ${isSmall ? '13px' : '14px'}; padding: ${isSmall ? '8px 12px' : '10px 15px'};">${value.nome}: ${value.count}</div>`;
         }
     });
     container.innerHTML = html;
@@ -210,29 +210,29 @@ function renderDrawerFilters(pais, acordosFiltrados) {
     });
     
     let filtrosHtml = `
-        <div style="margin-bottom: ${isSmall ? '15px' : '20px'};">
-            <h5 style="color: var(--primary); margin-bottom: ${isSmall ? '8px' : '12px'}; font-size: ${isSmall ? '13px' : '16px'};">
+        <div style="margin-bottom: ${isSmall ? '20px' : '25px'};">
+            <h5 style="color: var(--primary); margin-bottom: ${isSmall ? '12px' : '15px'}; font-size: ${isSmall ? '16px' : '18px'}; font-weight: 700;">
                 <i class="fas fa-filter"></i> Filtrar por tipo:
             </h5>
-            <div style="display: flex; flex-wrap: wrap; gap: ${isSmall ? '6px' : '10px'};">
+            <div style="display: flex; flex-wrap: wrap; gap: ${isSmall ? '10px' : '12px'};">
     `;
     
     filtrosHtml += `
         <button class="drawer-filter-btn ${currentFilter === 'todos' ? 'active' : ''}" data-tipo="todos" style="
-            padding: ${isSmall ? '6px 10px' : (isMobileDevice ? '8px 14px' : '10px 18px')};
+            padding: ${isSmall ? '10px 16px' : (isMobileDevice ? '12px 20px' : '14px 24px')};
             border: 2px solid ${currentFilter === 'todos' ? '#C41E3A' : '#e2e8f0'};
             background: ${currentFilter === 'todos' ? '#C41E3A' : 'white'};
             color: ${currentFilter === 'todos' ? 'white' : '#475569'};
             border-radius: 30px;
-            font-size: ${isSmall ? '11px' : (isMobileDevice ? '12px' : '14px')};
+            font-size: ${isSmall ? '14px' : (isMobileDevice ? '15px' : '16px')};
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
             display: flex;
             align-items: center;
-            gap: ${isSmall ? '4px' : '6px'};
+            gap: 8px;
         ">
-            <i class="fas fa-globe"></i> ${isSmall ? '' : 'Todos '}(${contagemTipos.todos})
+            <i class="fas fa-globe"></i> Todos (${contagemTipos.todos})
         </button>
     `;
     
@@ -240,20 +240,20 @@ function renderDrawerFilters(pais, acordosFiltrados) {
         if (contagemTipos[key] > 0) {
             filtrosHtml += `
                 <button class="drawer-filter-btn ${currentFilter === key ? 'active' : ''}" data-tipo="${key}" style="
-                    padding: ${isSmall ? '6px 10px' : (isMobileDevice ? '8px 14px' : '10px 18px')};
+                    padding: ${isSmall ? '10px 16px' : (isMobileDevice ? '12px 20px' : '14px 24px')};
                     border: 2px solid ${currentFilter === key ? value.cor : '#e2e8f0'};
                     background: ${currentFilter === key ? value.cor : 'white'};
                     color: ${currentFilter === key ? 'white' : '#475569'};
                     border-radius: 30px;
-                    font-size: ${isSmall ? '11px' : (isMobileDevice ? '12px' : '14px')};
+                    font-size: ${isSmall ? '14px' : (isMobileDevice ? '15px' : '16px')};
                     font-weight: 600;
                     cursor: pointer;
                     transition: all 0.2s;
                     display: flex;
                     align-items: center;
-                    gap: ${isSmall ? '4px' : '6px'};
+                    gap: 8px;
                 ">
-                    <i class="fas ${value.icon}"></i> ${isSmall ? '' : value.nome + ' '}(${contagemTipos[key]})
+                    <i class="fas ${value.icon}"></i> ${value.nome} (${contagemTipos[key]})
                 </button>
             `;
         }
@@ -267,7 +267,7 @@ function renderDrawerFilters(pais, acordosFiltrados) {
     return filtrosHtml;
 }
 
-// Função para carregar detalhes do país
+// Função para carregar detalhes do país (apenas a parte modificada dos cards)
 function loadCountryDetails(pais) {
     if (!pais) return;
     
@@ -279,8 +279,8 @@ function loadCountryDetails(pais) {
     const totalFiltrado = acordosFiltrados.length;
     const totalOriginal = pais.acordos.length;
     drawerTitle.innerHTML = `
-        ${pais.pais} · ${pais.continente}
-        <span style="font-size: ${isSmall ? '0.7rem' : '0.9rem'}; background: rgba(255,255,255,0.2); padding: ${isSmall ? '3px 8px' : '4px 12px'}; border-radius: 30px; margin-left: ${isSmall ? '4px' : '8px'};">
+        <span style="font-size: ${isSmall ? '18px' : (isMobileDevice ? '20px' : '24px')}; font-weight: 700;">${pais.pais}</span> · <span style="font-size: ${isSmall ? '14px' : (isMobileDevice ? '16px' : '18px')};">${pais.continente}</span>
+        <span style="font-size: ${isSmall ? '13px' : (isMobileDevice ? '14px' : '15px')}; background: rgba(255,255,255,0.2); padding: ${isSmall ? '4px 10px' : '6px 14px'}; border-radius: 30px; margin-left: ${isSmall ? '8px' : '12px'};">
             ${totalFiltrado}/${totalOriginal}
         </span>
     `;
@@ -291,19 +291,19 @@ function loadCountryDetails(pais) {
         drawerContent.innerHTML = `
             ${filtrosDrawerHtml}
             <div class="empty-state">
-                <i class="fas fa-filter" style="font-size: ${isSmall ? '2rem' : '3rem'}; margin-bottom: 15px;"></i>
-                <h3 style="color: var(--primary); margin-bottom: 10px; font-size: ${isSmall ? '16px' : (isMobileDevice ? '18px' : '22px')};">Nenhum memorando encontrado</h3>
-                <p style="color: #64748b; font-size: ${isSmall ? '12px' : (isMobileDevice ? '13px' : '15px')};">Tente remover alguns filtros para ver mais resultados</p>
+                <i class="fas fa-filter" style="font-size: ${isSmall ? '3rem' : '4rem'}; margin-bottom: 20px;"></i>
+                <h3 style="color: var(--primary); margin-bottom: 12px; font-size: ${isSmall ? '18px' : (isMobileDevice ? '20px' : '24px')};">Nenhum memorando encontrado</h3>
+                <p style="color: #64748b; font-size: ${isSmall ? '14px' : (isMobileDevice ? '15px' : '16px')};">Tente remover alguns filtros para ver mais resultados</p>
                 <button onclick="resetToTodos()" style="
                     background: var(--accent);
                     color: white;
                     border: none;
-                    padding: ${isSmall ? '8px 16px' : (isMobileDevice ? '10px 20px' : '12px 24px')};
+                    padding: ${isSmall ? '12px 24px' : (isMobileDevice ? '14px 28px' : '16px 32px')};
                     border-radius: 30px;
-                    margin-top: 20px;
+                    margin-top: 25px;
                     cursor: pointer;
                     font-weight: 600;
-                    font-size: ${isSmall ? '12px' : (isMobileDevice ? '13px' : '15px')};
+                    font-size: ${isSmall ? '14px' : (isMobileDevice ? '15px' : '16px')};
                     box-shadow: 0 4px 10px rgba(196,30,58,0.3);
                     transition: all 0.3s;
                 ">
@@ -322,19 +322,19 @@ function loadCountryDetails(pais) {
         <div style="
             background: linear-gradient(135deg, var(--primary) 0%, #1a365d 100%);
             color: white;
-            padding: ${isSmall ? '12px' : (isMobileDevice ? '15px' : '20px')};
+            padding: ${isSmall ? '16px' : (isMobileDevice ? '18px' : '22px')};
             border-radius: 16px;
-            margin-bottom: ${isSmall ? '15px' : '20px'};
+            margin-bottom: ${isSmall ? '20px' : '25px'};
         ">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                <span style="font-size: ${isSmall ? '12px' : (isMobileDevice ? '13px' : '16px')};"><i class="fas fa-file-signature"></i> <strong>${acordosFiltrados.length}</strong> memorandos</span>
-                <span style="background: rgba(255,255,255,0.2); padding: ${isSmall ? '3px 8px' : '5px 12px'}; border-radius: 30px; font-size: ${isSmall ? '10px' : (isMobileDevice ? '11px' : '13px')};">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <span style="font-size: ${isSmall ? '15px' : (isMobileDevice ? '16px' : '18px')};"><i class="fas fa-file-signature"></i> <strong>${acordosFiltrados.length}</strong> memorandos</span>
+                <span style="background: rgba(255,255,255,0.2); padding: ${isSmall ? '6px 12px' : '8px 16px'}; border-radius: 30px; font-size: ${isSmall ? '13px' : (isMobileDevice ? '14px' : '15px')};">
                     <i class="fas fa-filter"></i> ${currentFilter === 'todos' ? 'Todos' : tiposInstituicao[currentFilter]?.nome}
                 </span>
             </div>
             ${currentSearchTerm ? `
-                <div style="font-size: ${isSmall ? '10px' : (isMobileDevice ? '11px' : '13px')}; background: rgba(255,255,255,0.1); padding: ${isSmall ? '6px' : '8px'}; border-radius: 8px;">
-                    <i class="fas fa-search"></i> Busca: "${currentSearchTerm.substring(0, 30)}${currentSearchTerm.length > 30 ? '...' : ''}"
+                <div style="font-size: ${isSmall ? '13px' : (isMobileDevice ? '14px' : '15px')}; background: rgba(255,255,255,0.1); padding: 10px; border-radius: 8px;">
+                    <i class="fas fa-search"></i> Busca: "${currentSearchTerm}"
                 </div>
             ` : ''}
         </div>
@@ -346,15 +346,17 @@ function loadCountryDetails(pais) {
         const duracao = a.duracao !== 'NS' ? a.duracao : 'Não especificada';
         const renovacao = a.tipo_renovacao !== 'NS' ? a.tipo_renovacao : 'Não especificada';
         
-        // Ajustar tamanhos para mobile pequeno
-        const logoSize = isSmall ? '50px' : (isMobileDevice ? '60px' : '80px');
+        // Tamanhos ajustados - número do memorando menor e sem cor de vinho
+        const logoSize = isSmall ? '60px' : (isMobileDevice ? '70px' : '80px');
         const iconSize = isSmall ? '12px' : (isMobileDevice ? '13px' : '14px');
-        const titleSize = isSmall ? '14px' : (isMobileDevice ? '16px' : '20px');
-        const descSize = isSmall ? '11px' : (isMobileDevice ? '12px' : '15px');
+        const numeroSize = isSmall ? '11px' : (isMobileDevice ? '12px' : '13px');
+        const tipoSize = isSmall ? '11px' : (isMobileDevice ? '12px' : '13px');
+        const titleSize = isSmall ? '18px' : (isMobileDevice ? '20px' : '22px');
+        const descSize = isSmall ? '14px' : (isMobileDevice ? '15px' : '16px');
         
         html += `
-            <div class="agreement-card" id="acordo-${a.numero}" style="padding: ${isSmall ? '12px' : (isMobileDevice ? '15px' : '18px')};">
-                <div style="display: flex; gap: ${isSmall ? '10px' : (isMobileDevice ? '12px' : '20px')}; align-items: flex-start;">
+            <div class="agreement-card" id="acordo-${a.numero}" style="margin-bottom: ${isSmall ? '20px' : '25px'}; padding: ${isSmall ? '15px' : (isMobileDevice ? '18px' : '20px')};">
+                <div style="display: flex; gap: ${isSmall ? '12px' : (isMobileDevice ? '15px' : '20px')}; align-items: flex-start;">
                     <div style="flex-shrink: 0;">
                         <div style="width: ${logoSize}; height: ${logoSize}; background: #f8fafc; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: 1px solid #e2e8f0; overflow: hidden;">
                             <img src="${a.caminho_imagem}" alt="${a.entidade}" 
@@ -364,57 +366,57 @@ function loadCountryDetails(pais) {
                     </div>
                     
                     <div style="flex: 1; min-width: 0;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: ${isSmall ? '6px' : '8px'}; flex-wrap: wrap; gap: 6px;">
-                            <span class="agreement-number" style="font-size: ${isSmall ? '10px' : (isMobileDevice ? '11px' : '14px')}; font-weight: 600;">Memorando nº ${a.numero}</span>
-                            <span class="tipo-badge-card" style="background: ${tipoInfo.cor}; font-size: ${isSmall ? '9px' : (isMobileDevice ? '10px' : '13px')}; padding: ${isSmall ? '2px 8px' : '4px 12px'}; border-radius: 20px; white-space: nowrap;">${isSmall ? tipoInfo.nome.substring(0, 8) : tipoInfo.nome}</span>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+                            <span class="agreement-number" style="font-size: ${numeroSize}; font-weight: 600; color: #64748b; background: #f1f5f9; padding: 4px 10px; border-radius: 20px;">Memorando nº ${a.numero}</span>
+                            <span class="tipo-badge-card" style="background: ${tipoInfo.cor}; font-size: ${tipoSize}; font-weight: 500; padding: 4px 12px; border-radius: 20px; color: white; white-space: nowrap;">${tipoInfo.nome}</span>
                         </div>
                         
-                        <h4 style="font-size: ${titleSize}; margin: 0 0 ${isSmall ? '6px' : '10px'} 0; line-height: 1.3; color: var(--primary); font-weight: 700; word-break: break-word;">${a.entidade}</h4>
+                        <h4 style="font-size: ${titleSize}; margin: 0 0 10px 0; line-height: 1.3; color: var(--primary); font-weight: 700; word-break: break-word;">${a.entidade}</h4>
                         
-                        <div style="display: flex; flex-wrap: wrap; gap: ${isSmall ? '6px' : (isMobileDevice ? '8px' : '15px')}; margin-bottom: ${isSmall ? '6px' : '10px'};">
-                            <div style="display: flex; align-items: center; gap: 4px;">
-                                <i class="fas fa-calendar" style="width: 12px; font-size: ${iconSize}; color: #64748b;"></i>
-                                <span style="font-size: ${iconSize};"><strong>Data:</strong> ${dataFormatada.substring(0, isSmall ? 8 : 100)}${isSmall && dataFormatada.length > 8 ? '...' : ''}</span>
+                        <div style="display: flex; flex-wrap: wrap; gap: ${isSmall ? '10px' : (isMobileDevice ? '12px' : '15px')}; margin-bottom: 10px;">
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <i class="fas fa-calendar" style="width: 14px; font-size: ${iconSize}; color: #64748b;"></i>
+                                <span style="font-size: ${iconSize};"><strong>Data:</strong> ${dataFormatada}</span>
                             </div>
                             
-                            <div style="display: flex; align-items: center; gap: 4px;">
-                                <i class="fas fa-hourglass-half" style="width: 12px; font-size: ${iconSize}; color: #64748b;"></i>
-                                <span style="font-size: ${iconSize};"><strong>Duração:</strong> ${duracao.substring(0, isSmall ? 12 : 100)}${isSmall && duracao.length > 12 ? '...' : ''}</span>
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <i class="fas fa-hourglass-half" style="width: 14px; font-size: ${iconSize}; color: #64748b;"></i>
+                                <span style="font-size: ${iconSize};"><strong>Duração:</strong> ${duracao}</span>
                             </div>
                             
-                            <div style="display: flex; align-items: center; gap: 4px;">
-                                <i class="fas fa-sync-alt" style="width: 12px; font-size: ${iconSize}; color: #64748b;"></i>
-                                <span style="font-size: ${iconSize};"><strong>Renovação:</strong> ${renovacao.substring(0, isSmall ? 12 : 100)}${isSmall && renovacao.length > 12 ? '...' : ''}</span>
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <i class="fas fa-sync-alt" style="width: 14px; font-size: ${iconSize}; color: #64748b;"></i>
+                                <span style="font-size: ${iconSize};"><strong>Renovação:</strong> ${renovacao}</span>
                             </div>
                         </div>
                         
-                        <div class="agreement-desc" style="font-size: ${descSize}; margin-bottom: ${isSmall ? '8px' : '12px'}; line-height: 1.4; color: #475569;">
-                            <i class="fas fa-quote-left" style="opacity: 0.5; font-size: 0.7rem;"></i>
-                            ${a.descricao.length > (isSmall ? 60 : (isMobileDevice ? 80 : 120)) ? a.descricao.substring(0, (isSmall ? 60 : (isMobileDevice ? 80 : 120))) + '...' : a.descricao}
+                        <div class="agreement-desc" style="font-size: ${descSize}; margin-bottom: 12px; line-height: 1.5; color: #475569;">
+                            <i class="fas fa-quote-left" style="opacity: 0.5; font-size: 0.8rem;"></i>
+                            ${a.descricao}
                         </div>
                         
-                        <button class="ver-mais-btn" onclick="toggleDetalhes(${a.numero})" style="font-size: ${isSmall ? '10px' : (isMobileDevice ? '11px' : '13px')}; padding: ${isSmall ? '4px 8px' : (isMobileDevice ? '5px 10px' : '8px 16px')}; background: none; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; color: #C41E3A; font-weight: 500;">
-                            <i class="fas fa-chevron-down"></i> Ver detalhes
+                        <button class="ver-mais-btn" onclick="toggleDetalhes(${a.numero})" style="font-size: ${isSmall ? '12px' : (isMobileDevice ? '13px' : '14px')}; padding: ${isSmall ? '6px 12px' : (isMobileDevice ? '8px 16px' : '10px 20px')}; background: none; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; color: #C41E3A; font-weight: 500;">
+                            <i class="fas fa-chevron-down"></i> Ver detalhes da assinatura
                         </button>
                         
-                        <div id="detalhes-${a.numero}" style="display: none; margin-top: ${isSmall ? '8px' : '12px'}; padding-top: ${isSmall ? '8px' : '12px'}; border-top: 1px dashed #e2e8f0;">
-                            <h5 style="color: var(--primary); margin-bottom: ${isSmall ? '6px' : '10px'}; font-size: ${isSmall ? '11px' : (isMobileDevice ? '12px' : '14px')};">
+                        <div id="detalhes-${a.numero}" style="display: none; margin-top: 12px; padding-top: 12px; border-top: 1px dashed #e2e8f0;">
+                            <h5 style="color: var(--primary); margin-bottom: 10px; font-size: ${isSmall ? '14px' : (isMobileDevice ? '15px' : '16px')}; font-weight: 700;">
                                 <i class="fas fa-pen-fancy"></i> Detalhes da assinatura
                             </h5>
                             
-                            <div style="margin-bottom: ${isSmall ? '4px' : '8px'};">
-                                <i class="fas fa-user-graduate" style="color: var(--primary); width: 16px; font-size: ${iconSize};"></i>
-                                <div style="font-size: ${iconSize}; margin-top: 4px; word-break: break-word;">
+                            <div style="margin-bottom: 10px;">
+                                <i class="fas fa-user-graduate" style="color: var(--primary); width: 18px; font-size: ${iconSize};"></i>
+                                <div style="font-size: ${descSize}; margin-top: 4px; line-height: 1.4;">
                                     <strong>UNITIVA:</strong><br>
-                                    ${a.assinante_unitiva.length > (isSmall ? 40 : 80) ? a.assinante_unitiva.substring(0, (isSmall ? 40 : 80)) + '...' : a.assinante_unitiva}
+                                    ${a.assinante_unitiva}
                                 </div>
                             </div>
                             
                             <div>
-                                <i class="fas fa-user-tie" style="color: var(--primary); width: 16px; font-size: ${iconSize};"></i>
-                                <div style="font-size: ${iconSize}; margin-top: 4px; word-break: break-word;">
+                                <i class="fas fa-user-tie" style="color: var(--primary); width: 18px; font-size: ${iconSize};"></i>
+                                <div style="font-size: ${descSize}; margin-top: 4px; line-height: 1.4;">
                                     <strong>Parceiro:</strong><br>
-                                    ${a.assinante_parceiro.length > (isSmall ? 40 : 80) ? a.assinante_parceiro.substring(0, (isSmall ? 40 : 80)) + '...' : a.assinante_parceiro}
+                                    ${a.assinante_parceiro}
                                 </div>
                             </div>
                         </div>
@@ -428,7 +430,6 @@ function loadCountryDetails(pais) {
     detailDrawer.classList.add('open');
     adicionarEventListenersFiltrosDrawer();
 }
-
 function adicionarEventListenersFiltrosDrawer() {
     document.querySelectorAll('.drawer-filter-btn').forEach(btn => {
         btn.addEventListener('click', function(e) {
@@ -468,10 +469,10 @@ window.toggleDetalhes = function(numero) {
     
     if (detalhesDiv.style.display === 'none') {
         detalhesDiv.style.display = 'block';
-        botao.innerHTML = '<i class="fas fa-chevron-up"></i> Ver menos';
+        botao.innerHTML = '<i class="fas fa-chevron-up"></i> Ver menos detalhes';
     } else {
         detalhesDiv.style.display = 'none';
-        botao.innerHTML = '<i class="fas fa-chevron-down"></i> Ver detalhes';
+        botao.innerHTML = '<i class="fas fa-chevron-down"></i> Ver detalhes da assinatura';
     }
 };
 
@@ -530,10 +531,10 @@ function initGlobe() {
             
             // Ajustar tamanho do marcador para mobile
             const isSmall = isSmallMobile();
-            const markerSize = isSmall ? 36 : (isMobile() ? 40 : 56);
-            const iconSize = isSmall ? 16 : (isMobile() ? 18 : 26);
-            const fontSize = isSmall ? 10 : (isMobile() ? 11 : 15);
-            const topOffset = isSmall ? -38 : (isMobile() ? -44 : -48);
+            const markerSize = isSmall ? 48 : (isMobile() ? 54 : 70);
+            const iconSize = isSmall ? 22 : (isMobile() ? 24 : 32);
+            const fontSize = isSmall ? 13 : (isMobile() ? 14 : 16);
+            const topOffset = isSmall ? -50 : (isMobile() ? -56 : -60);
             
             const marker = document.createElement('div');
             marker.style.cssText = `
@@ -551,8 +552,6 @@ function initGlobe() {
                 animation: pulse 2s infinite;
             `;
             
-            const paisNome = d.pais.length > (isSmall ? 10 : 15) ? d.pais.substring(0, (isSmall ? 8 : 12)) + '...' : d.pais;
-            
             marker.innerHTML = `
                 <i class="fas fa-handshake" style="font-size: ${iconSize}px; color: #C41E3A;"></i>
                 <span style="
@@ -562,7 +561,7 @@ function initGlobe() {
                     transform: translateX(-50%);
                     background: #002147;
                     color: white;
-                    padding: ${isSmall ? '4px 8px' : (isMobile() ? '6px 10px' : '8px 16px')};
+                    padding: ${isSmall ? '8px 14px' : (isMobile() ? '10px 18px' : '12px 22px')};
                     border-radius: 40px;
                     font-size: ${fontSize}px;
                     font-weight: bold;
@@ -571,8 +570,8 @@ function initGlobe() {
                     box-shadow: 0 4px 15px rgba(0,0,0,0.4);
                     pointer-events: none;
                     z-index: 1000;
-                    letter-spacing: 0.3px;
-                ">${paisNome} (${d.totalAcordos})</span>
+                    letter-spacing: 0.5px;
+                ">${d.pais} (${d.totalAcordos})</span>
             `;
             
             container.appendChild(marker);
