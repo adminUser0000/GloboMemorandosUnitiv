@@ -527,17 +527,7 @@ const memorandos = [
         lat: 20.5937,
         lng: 78.9629,
         acordos: [
-            {
-                numero: 8,
-                entidade: "Chandigarh University",
-                data: "2016-07-07",
-                duracao: "5 anos",
-                tipo_renovacao: "Renovação por acordo",
-                descricao: "Intercâmbio académico e investigação conjunta.",
-                assinante_unitiva: "Inocente Mutimucuio",
-                assinante_parceiro: "Rajinder Singh Bawa",
-                data_assinatura: "2016-07-07"
-            },
+            
             {
                 numero: 9,
                 entidade: "Alagappa University",
