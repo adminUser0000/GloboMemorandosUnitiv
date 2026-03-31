@@ -200,7 +200,7 @@ function renderDrawerFilters(pais, acordosFiltrados) {
     
     let filtrosHtml = `
         <div style="margin-bottom: 20px;">
-            <h5 style="color: var(--primary); margin-bottom: 12px; font-size: ${isMobile() ? '14px' : '15px'};">
+            <h5 style="color: var(--primary); margin-bottom: 12px; font-size: ${isMobile() ? '15px' : '16px'};">
                 <i class="fas fa-filter"></i> Filtrar por tipo:
             </h5>
             <div style="display: flex; flex-wrap: wrap; gap: ${isMobile() ? '8px' : '10px'};">
@@ -213,7 +213,7 @@ function renderDrawerFilters(pais, acordosFiltrados) {
             background: ${currentFilter === 'todos' ? '#C41E3A' : 'white'};
             color: ${currentFilter === 'todos' ? 'white' : '#475569'};
             border-radius: 30px;
-            font-size: ${isMobile() ? '12px' : '14px'};
+            font-size: ${isMobile() ? '13px' : '14px'};
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
@@ -234,7 +234,7 @@ function renderDrawerFilters(pais, acordosFiltrados) {
                     background: ${currentFilter === key ? value.cor : 'white'};
                     color: ${currentFilter === key ? 'white' : '#475569'};
                     border-radius: 30px;
-                    font-size: ${isMobile() ? '12px' : '14px'};
+                    font-size: ${isMobile() ? '13px' : '14px'};
                     font-weight: 600;
                     cursor: pointer;
                     transition: all 0.2s;
@@ -267,7 +267,7 @@ function loadCountryDetails(pais) {
     const totalOriginal = pais.acordos.length;
     drawerTitle.innerHTML = `
         ${pais.pais} · ${pais.continente}
-        <span style="font-size: 0.8rem; background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 30px; margin-left: 8px;">
+        <span style="font-size: 0.9rem; background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 30px; margin-left: 8px;">
             ${totalFiltrado}/${totalOriginal}
         </span>
     `;
@@ -279,8 +279,8 @@ function loadCountryDetails(pais) {
             ${filtrosDrawerHtml}
             <div class="empty-state">
                 <i class="fas fa-filter" style="font-size: 3rem; margin-bottom: 15px;"></i>
-                <h3 style="color: var(--primary); margin-bottom: 10px; font-size: ${isMobile() ? '18px' : '20px'};">Nenhum memorando encontrado</h3>
-                <p style="color: #64748b; font-size: ${isMobile() ? '13px' : '14px'};">Tente remover alguns filtros para ver mais resultados</p>
+                <h3 style="color: var(--primary); margin-bottom: 10px; font-size: ${isMobile() ? '20px' : '22px'};">Nenhum memorando encontrado</h3>
+                <p style="color: #64748b; font-size: ${isMobile() ? '14px' : '15px'};">Tente remover alguns filtros para ver mais resultados</p>
                 <button onclick="resetToTodos()" style="
                     background: var(--accent);
                     color: white;
@@ -290,7 +290,7 @@ function loadCountryDetails(pais) {
                     margin-top: 20px;
                     cursor: pointer;
                     font-weight: 600;
-                    font-size: ${isMobile() ? '13px' : '14px'};
+                    font-size: ${isMobile() ? '14px' : '15px'};
                     box-shadow: 0 4px 10px rgba(196,30,58,0.3);
                     transition: all 0.3s;
                 ">
@@ -309,18 +309,18 @@ function loadCountryDetails(pais) {
         <div style="
             background: linear-gradient(135deg, var(--primary) 0%, #1a365d 100%);
             color: white;
-            padding: ${isMobile() ? '15px' : '18px'};
+            padding: ${isMobile() ? '18px' : '20px'};
             border-radius: 16px;
             margin-bottom: 20px;
         ">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                <span style="font-size: ${isMobile() ? '13px' : '15px'};"><i class="fas fa-file-signature"></i> <strong>${acordosFiltrados.length}</strong> memorandos</span>
-                <span style="background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 30px; font-size: ${isMobile() ? '11px' : '13px'};">
+                <span style="font-size: ${isMobile() ? '14px' : '16px'};"><i class="fas fa-file-signature"></i> <strong>${acordosFiltrados.length}</strong> memorandos</span>
+                <span style="background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 30px; font-size: ${isMobile() ? '12px' : '13px'};">
                     <i class="fas fa-filter"></i> ${currentFilter === 'todos' ? 'Todos' : tiposInstituicao[currentFilter]?.nome}
                 </span>
             </div>
             ${currentSearchTerm ? `
-                <div style="font-size: ${isMobile() ? '11px' : '13px'}; background: rgba(255,255,255,0.1); padding: 8px; border-radius: 8px;">
+                <div style="font-size: ${isMobile() ? '12px' : '13px'}; background: rgba(255,255,255,0.1); padding: 8px; border-radius: 8px;">
                     <i class="fas fa-search"></i> Busca: "${currentSearchTerm}"
                 </div>
             ` : ''}
@@ -334,66 +334,66 @@ function loadCountryDetails(pais) {
         const renovacao = a.tipo_renovacao !== 'NS' ? a.tipo_renovacao : 'Não especificada';
         
         html += `
-            <div class="agreement-card" id="acordo-${a.numero}">
-                <div style="display: flex; gap: ${isMobile() ? '12px' : '15px'}; align-items: flex-start;">
+            <div class="agreement-card" id="acordo-${a.numero}" style="padding: ${isMobile() ? '15px' : '18px'};">
+                <div style="display: flex; gap: ${isMobile() ? '15px' : '20px'}; align-items: flex-start;">
                     <div style="flex-shrink: 0;">
-                        <div style="width: ${isMobile() ? '60px' : '80px'}; height: ${isMobile() ? '60px' : '80px'}; background: #f8fafc; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: 1px solid #e2e8f0; overflow: hidden;">
+                        <div style="width: ${isMobile() ? '70px' : '90px'}; height: ${isMobile() ? '70px' : '90px'}; background: #f8fafc; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: 1px solid #e2e8f0; overflow: hidden;">
                             <img src="${a.caminho_imagem}" alt="${a.entidade}" 
                                  style="width: 100%; height: 100%; object-fit: cover;"
-                                 onerror="this.src='https://placehold.co/60x60/e2e8f0/475569?text=Logo'">
+                                 onerror="this.src='https://placehold.co/70x70/e2e8f0/475569?text=Logo'">
                         </div>
                     </div>
                     
                     <div style="flex: 1;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 5px;">
-                            <span class="agreement-number" style="font-size: ${isMobile() ? '11px' : '13px'}; font-weight: 600;">Memorando nº ${a.numero}</span>
-                            <span class="tipo-badge-card" style="background: ${tipoInfo.cor}; font-size: ${isMobile() ? '10px' : '12px'}; padding: 3px 10px; border-radius: 20px;">${tipoInfo.nome}</span>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+                            <span class="agreement-number" style="font-size: ${isMobile() ? '12px' : '14px'}; font-weight: 600;">Memorando nº ${a.numero}</span>
+                            <span class="tipo-badge-card" style="background: ${tipoInfo.cor}; font-size: ${isMobile() ? '11px' : '13px'}; padding: 4px 12px; border-radius: 20px;">${tipoInfo.nome}</span>
                         </div>
                         
-                        <h4 style="font-size: ${isMobile() ? '15px' : '17px'}; margin: 0 0 8px 0; line-height: 1.3; color: var(--primary);">${a.entidade}</h4>
+                        <h4 style="font-size: ${isMobile() ? '17px' : '20px'}; margin: 0 0 10px 0; line-height: 1.3; color: var(--primary); font-weight: 700;">${a.entidade}</h4>
                         
-                        <div style="display: flex; flex-wrap: wrap; gap: ${isMobile() ? '8px' : '12px'}; margin-bottom: 8px;">
-                            <div style="display: flex; align-items: center; gap: 4px;">
-                                <i class="fas fa-calendar" style="width: 14px; font-size: ${isMobile() ? '10px' : '13px'}; color: #64748b;"></i>
-                                <span style="font-size: ${isMobile() ? '10px' : '13px'};"><strong>Data:</strong> ${dataFormatada}</span>
+                        <div style="display: flex; flex-wrap: wrap; gap: ${isMobile() ? '10px' : '15px'}; margin-bottom: 10px;">
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <i class="fas fa-calendar" style="width: 16px; font-size: ${isMobile() ? '12px' : '14px'}; color: #64748b;"></i>
+                                <span style="font-size: ${isMobile() ? '12px' : '14px'};"><strong>Data:</strong> ${dataFormatada}</span>
                             </div>
                             
-                            <div style="display: flex; align-items: center; gap: 4px;">
-                                <i class="fas fa-hourglass-half" style="width: 14px; font-size: ${isMobile() ? '10px' : '13px'}; color: #64748b;"></i>
-                                <span style="font-size: ${isMobile() ? '10px' : '13px'};"><strong>Duração:</strong> ${duracao}</span>
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <i class="fas fa-hourglass-half" style="width: 16px; font-size: ${isMobile() ? '12px' : '14px'}; color: #64748b;"></i>
+                                <span style="font-size: ${isMobile() ? '12px' : '14px'};"><strong>Duração:</strong> ${duracao}</span>
                             </div>
                             
-                            <div style="display: flex; align-items: center; gap: 4px;">
-                                <i class="fas fa-sync-alt" style="width: 14px; font-size: ${isMobile() ? '10px' : '13px'}; color: #64748b;"></i>
-                                <span style="font-size: ${isMobile() ? '10px' : '13px'};"><strong>Renovação:</strong> ${renovacao}</span>
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <i class="fas fa-sync-alt" style="width: 16px; font-size: ${isMobile() ? '12px' : '14px'}; color: #64748b;"></i>
+                                <span style="font-size: ${isMobile() ? '12px' : '14px'};"><strong>Renovação:</strong> ${renovacao}</span>
                             </div>
                         </div>
                         
-                        <div class="agreement-desc" style="font-size: ${isMobile() ? '11px' : '13px'}; margin-bottom: 10px; line-height: 1.4; color: #475569;">
-                            <i class="fas fa-quote-left" style="opacity: 0.5; font-size: 0.7rem;"></i>
-                            ${a.descricao.length > (isMobile() ? 80 : 120) ? a.descricao.substring(0, (isMobile() ? 80 : 120)) + '...' : a.descricao}
+                        <div class="agreement-desc" style="font-size: ${isMobile() ? '13px' : '15px'}; margin-bottom: 12px; line-height: 1.5; color: #475569;">
+                            <i class="fas fa-quote-left" style="opacity: 0.5; font-size: 0.8rem;"></i>
+                            ${a.descricao.length > (isMobile() ? 100 : 150) ? a.descricao.substring(0, (isMobile() ? 100 : 150)) + '...' : a.descricao}
                         </div>
                         
-                        <button class="ver-mais-btn" onclick="toggleDetalhes(${a.numero})" style="font-size: ${isMobile() ? '11px' : '12px'}; padding: ${isMobile() ? '5px 10px' : '6px 12px'}; background: none; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; color: #C41E3A; font-weight: 500;">
+                        <button class="ver-mais-btn" onclick="toggleDetalhes(${a.numero})" style="font-size: ${isMobile() ? '12px' : '13px'}; padding: ${isMobile() ? '6px 12px' : '8px 16px'}; background: none; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; color: #C41E3A; font-weight: 500;">
                             <i class="fas fa-chevron-down"></i> Ver detalhes da assinatura
                         </button>
                         
-                        <div id="detalhes-${a.numero}" style="display: none; margin-top: 10px; padding-top: 10px; border-top: 1px dashed #e2e8f0;">
-                            <h5 style="color: var(--primary); margin-bottom: 8px; font-size: ${isMobile() ? '12px' : '13px'};">
+                        <div id="detalhes-${a.numero}" style="display: none; margin-top: 12px; padding-top: 12px; border-top: 1px dashed #e2e8f0;">
+                            <h5 style="color: var(--primary); margin-bottom: 10px; font-size: ${isMobile() ? '13px' : '14px'};">
                                 <i class="fas fa-pen-fancy"></i> Detalhes da assinatura
                             </h5>
                             
-                            <div style="margin-bottom: 6px;">
-                                <i class="fas fa-user-graduate" style="color: var(--primary); width: 18px; font-size: ${isMobile() ? '11px' : '13px'};"></i>
-                                <div style="font-size: ${isMobile() ? '11px' : '13px'}; margin-top: 2px;">
+                            <div style="margin-bottom: 8px;">
+                                <i class="fas fa-user-graduate" style="color: var(--primary); width: 20px; font-size: ${isMobile() ? '12px' : '14px'};"></i>
+                                <div style="font-size: ${isMobile() ? '13px' : '14px'}; margin-top: 4px;">
                                     <strong>UNITIVA:</strong><br>
                                     ${a.assinante_unitiva}
                                 </div>
                             </div>
                             
                             <div>
-                                <i class="fas fa-user-tie" style="color: var(--primary); width: 18px; font-size: ${isMobile() ? '11px' : '13px'};"></i>
-                                <div style="font-size: ${isMobile() ? '11px' : '13px'}; margin-top: 2px;">
+                                <i class="fas fa-user-tie" style="color: var(--primary); width: 20px; font-size: ${isMobile() ? '12px' : '14px'};"></i>
+                                <div style="font-size: ${isMobile() ? '13px' : '14px'}; margin-top: 4px;">
                                     <strong>Parceiro:</strong><br>
                                     ${a.assinante_parceiro}
                                 </div>
@@ -510,9 +510,9 @@ function initGlobe() {
             container.style.pointerEvents = 'auto';
             
             // Ajustar tamanho do marcador para mobile
-            const markerSize = isMobile() ? 40 : 52;
-            const iconSize = isMobile() ? 18 : 24;
-            const fontSize = isMobile() ? 10 : 13;
+            const markerSize = isMobile() ? 44 : 56;
+            const iconSize = isMobile() ? 20 : 26;
+            const fontSize = isMobile() ? 12 : 15;
             
             const marker = document.createElement('div');
             marker.style.cssText = `
@@ -534,12 +534,12 @@ function initGlobe() {
                 <i class="fas fa-handshake" style="font-size: ${iconSize}px; color: #C41E3A;"></i>
                 <span style="
                     position: absolute;
-                    top: -40px;
+                    top: -48px;
                     left: 50%;
                     transform: translateX(-50%);
                     background: #002147;
                     color: white;
-                    padding: 6px 12px;
+                    padding: 8px 16px;
                     border-radius: 40px;
                     font-size: ${fontSize}px;
                     font-weight: bold;
@@ -548,6 +548,7 @@ function initGlobe() {
                     box-shadow: 0 4px 15px rgba(0,0,0,0.4);
                     pointer-events: none;
                     z-index: 1000;
+                    letter-spacing: 0.5px;
                 ">${d.pais} (${d.totalAcordos})</span>
             `;
             
